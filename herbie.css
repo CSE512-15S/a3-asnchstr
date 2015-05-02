@@ -1,0 +1,36 @@
+.axis path, .axis line {
+    fill: none;
+    stroke: #000;
+    shape-rendering: crispEdges;
+}
+
+.line {
+    fill: none;
+}
+
+.startline {
+    stroke: red;
+    stroke-width: 4px;
+}
+.endline {
+    stroke: blue;
+    stroke-width: 3px;
+}
+.targetline {
+    stroke: lime;
+    stroke-width: 2px;
+}
+p {
+    text-align:left;
+    margin-left: 150px;
+    margin-right: 150px;
+    margin-top: 10px;
+}
+h1 {
+    text-align:center;
+    margin-top: 20px;
+}
+svg {
+    margin-left: 150px;
+    margin-right: 150px;
+}
