@@ -1,5 +1,8 @@
+Herbie Data Exploration
+=======================
+
 Initial Description
-===================
+-------------------
 
 For this visualization assignment, I'm using a dataset from my
 research. My research is on improving the accuracy of floating point
@@ -35,7 +38,7 @@ of the x axis value they have selected.
 
 
 Final Writeup
-=============
+-------------
 
 At first I was planning on changing a few things from my initial
 storyboard, but over time I was able to implement everything that I
