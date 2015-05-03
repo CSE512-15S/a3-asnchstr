@@ -49,6 +49,13 @@ converted to their ordinal representation before being written to
 json, so that the javascript could easily scale the selection
 properly, and filter the points properly.
 
+One of the hardest design challenges was figuring out how to make the
+three different histograms visible at the same time and visually
+distinct. In the end I gave them each lines to show trends of nearby
+data, and gave them very distinct colors, as well as drew the ones
+rendered closer to the back in thicker line so that they could never
+by occluded by one in front of them.
+
 The project took about twelve person hours to implement. Most of the
 time was spent polishing aspects of the interface and learning d3. A
 basic version was finished in about eight person hours, and then
