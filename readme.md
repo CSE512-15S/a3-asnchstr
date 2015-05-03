@@ -1,8 +1,33 @@
-Herbie Data Exploration
-=======================
+a3-asnchstr
+===========
 
-Initial Description
--------------------
+## Team Members
+
+1. Alex Sanchez-Stern
+
+## Herbie Data Exploration
+
+Ever wondered what the error of floating point programs *looks* like?
+The graph on the left shows you an overview of the error of the
+quadtratic formula. The red line is the version you'll find in
+textbooks, and the green version is the version you can find in
+Richard Hammings "Numerical Methods for Scientists and Engineers". The
+one in blue is the version that the Herbie tool produces, when given
+the textbook version as input. But lines of average aren't the best
+way to see how the error is distributed. The graph on the right shows
+what portion of the points have what error. You can move around the
+selection on the left graph to see what the error distribution is at
+different points in the floating point spectrum.
+
+## Running Instructions
+
+You can see the exploration [at it's page](cse512-15s.github.io/a3-asnchstr).
+
+## Story Board
+
+You can vind the storyboard [here in the repo](storyboard.pdf?raw=true).
+
+## Initial Description
 
 For this visualization assignment, I'm using a dataset from my
 research. My research is on improving the accuracy of floating point
@@ -35,7 +60,6 @@ points have that much error. Instead of doing this for the whole
 dataset, I'll allow the user to select bounds on the first display, so
 that they can investigate how the error is distributed in any region
 of the x axis value they have selected.
-
 
 Final Writeup
 -------------
