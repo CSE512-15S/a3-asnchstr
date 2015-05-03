@@ -37,18 +37,20 @@ of the x axis value they have selected.
 Final Writeup
 =============
 
-In the end, a few things changed from my storyboard. I didn't have
-time to implement the ability for the user to change which variable
-the points were sorted on, but I plan on doing so in the future for my
-research. I had initially planned to implement for the quadtratic
-formula benchmark, which has a much more varying graph, and includes
-negative inputs. Unfortunately, the scaling on the graph required to
-handle both negative and positive numbers with the scale that
-quadtratic has requires converting floating point numbers to their
-ordinal integers, something which my plotting library in racket can
-do, but javascript does not support. I tried for a bit to hack around
-the lack of support, but javascript doesn't support 64 bit ints
-either, so there isn't anything that would take all doubles.
+At first I was planning on changing a few things from my initial
+storyboard, but over time I was able to implement everything that I
+had originally outlined. Unfortunately not all the logic could be done
+client side in d3. In particular, the scaling used for the graph
+requires taking floating point numbers and converting them to their
+bit representation, and then back as integers, so that you get a scale
+that matches how the floats are distributed. As a result, the graphs
+are drawn by racket to three static images, and the points are then
+converted to their ordinal representation before being written to
+json, so that the javascript could easily scale the selection
+properly, and filter the points properly.
 
-The project took about eight man hours to implement. Most of the time
-was spent polishing aspects of the interface and learning d3.
+The project took about twelve person hours to implement. Most of the
+time was spent polishing aspects of the interface and learning d3. A
+basic version was finished in about eight person hours, and then
+implementing smoother interactivity, axis switching, proper scaling,
+and applying it to a more complex example took another four.

@@ -8,15 +8,26 @@
   <body>
     <h1>Herbie Data Exploration</h1>
     <p>Ever wondered what the error of floating point
-    programs <i>looks</i> like? The graph on the left shows you an
-    overview of the error of the function sqrt(x+1) - sqrt(x), versus
-    it's more accurate but mathematically equivilent version,
-    1/(sqrt(x+1) + sqrt(x)). But lines of average aren't the best way
-    to see how the error is distributed. The graph on the right shows
-    what portion of the points have what error. Move around the
-    selection on the left graph to see what the error distribution is
-    at different points in the floating point spectrum.</p>
-    <svg><image xlink:href="diff-rt-graph.png"/></svg>
+      programs <i>looks</i> like? The graph on the left shows you an
+      overview of the error of the quadtraic formula. The red line is
+      the version you'll find in textbooks, and the green version is
+      the version you can find in Richard Hammings "Numerical Methods
+      for Scientists and Engineers". The one in blue is the version
+      that our tool, Herbie, produces, when given the textbook version
+      as input. But lines of average aren't the best way to see how
+      the error is distributed. The graph on the right shows what
+      portion of the points have what error. Move around the selection
+      on the left graph to see what the error distribution is at
+      different points in the floating point spectrum. The points are
+      currently sorted based on the value of the input "a". Changing
+      the axis dropdown changins which variable we sort the points
+      on. Try setting it to "2" to see some interesting behavior.</p>
+    <div class="selectordiv">
+      <label>Axis:</label>
+      <select name="selector" id="selector">
+      </select>
+    </div>
+    <svg><image xlink:href="quad-graph-b.png"/></svg>
     <script src="http://d3js.org/d3.v3.min.js" charset="utf-8"></script>
     <script src="herbie.js"></script>
   </body>

@@ -5,10 +5,14 @@ var margin = {top: 10, right: 30, bottom: 30, left: 30},
     height = imageheight - margin.top - margin.bottom,
     image_graph_margin = 50;
 
+axis = 0;
+
 drag = d3.behavior.drag()
     .origin(function(d) { return 1; })
     .on("drag", handle_drag)
     .on("dragend", render_graph);
+
+image_sources = ["quad-graph-a.png", "quad-graph-b.png", "quad-graph-c.png"]
 
 var image = d3.select("image")
     .attr("x", margin.left)
@@ -43,10 +47,10 @@ g.append("path")
 g.append("path")
     .attr("class", "line targetline");
 
-d3.json("diff-rt-errors.json", function(error, json){
+d3.json("quad-errors.json", function(error, json){
     if (error) return console.warn(error);
     error_data = json;
-    init_bounds(0, 500, 0);
+    init_bounds(20, 500);
     render_graph();
 });
 
@@ -61,16 +65,15 @@ function handle_drag(){
     var mouseposition = d3.mouse(this);
     var x = mouseposition[0] - margin.left;
     if (x < (lowbound + highbound) / 2){
-	update_bounds(x, highbound, axis);
+	update_bounds(x, highbound);
     } else if (x > (lowbound + highbound) / 2){
-	update_bounds(lowbound, x, axis);
+	update_bounds(lowbound, x);
     }
 }
 
-function init_bounds(start_lowbound, start_highbound, start_axis){
-    lowbound = start_lowbound;
-    highbound = start_highbound;
-    axis = start_axis;
+function init_bounds(start_lowbound, start_highbound){
+    lowbound = init_lowbound = start_lowbound;
+    highbound = init_highbound = start_highbound;
 
     var svg = d3.select("svg");
     
@@ -102,13 +105,40 @@ function init_bounds(start_lowbound, start_highbound, start_axis){
         .attr("opacity", .2)
         .attr("fill", "blue")
         .attr("pointer-events", "none");
+
+    var n_axis = error_data.points[0].length;
+    data = []
+    for(i = 0; i < n_axis; i++){
+        data.push(i)
+    }
+    
+    var options = d3.select("#selector").selectAll("option")
+        .data(data)
+        .enter()
+        .append("option");
+    options.text(function (d) { return d + 1;})
+        .attr("value", function (d) {return d;});
+    var selection = d3.select("#selector").on("change", update_axis_event);
+    axis = selection.node().value;
+    d3.select("image")
+        .attr("xlink:href", image_sources[axis]);
 }
 
-function update_bounds(new_lowbound, new_highbound, new_axis){
+function update_axis_event(){
+    update_axis(d3.event.target.value);
+}
+
+function update_axis(newaxis){
+    axis = newaxis;
+    d3.select("image")
+        .attr("xlink:href", image_sources[axis]);
+    render_graph();
+}
+
+function update_bounds(new_lowbound, new_highbound){
 
     lowbound = new_lowbound;
     highbound = new_highbound;
-    axis = new_axis;
 
     d3.selectAll(".left")
 	.attr("cx", lowbound + margin.left);
@@ -122,15 +152,15 @@ function update_bounds(new_lowbound, new_highbound, new_axis){
 
 function render_graph(){
 
-    var pointscaler = d3.scale.log()
-	.domain([min_x(0), max_x(0)])
-	.range([0, imagewidth]);
+    var pointscaler = d3.scale.linear()
+	.domain([init_lowbound, init_highbound])
+	.range([min_x(axis), max_x(axis)]);
     
     function filter_data(data){
         return d3.zip(error_data.points, data)
             .filter(function(d)
-                    { return d[0][axis] > pointscaler.invert(lowbound-10) &&
-                      d[0][axis] < pointscaler.invert(highbound-10); })
+                    { return d[0][axis] >= pointscaler(lowbound) &&
+                      d[0][axis] <= pointscaler(highbound); })
             .map(function(d) { return d[1]; });
     }
     
