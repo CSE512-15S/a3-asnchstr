@@ -32,20 +32,72 @@ var yAxis = d3.svg.axis()
 var svg = d3.select("svg")
     .attr("width", width + (margin.left + margin.right) * 2 + imagewidth)
     .attr("height", height + margin.top + margin.bottom);
-var g = svg.append("g")
+var histogram = svg.append("g")
     .attr("transform", "translate(" + (margin.left + imagewidth + image_graph_margin) + "," + margin.top + ")");
 
-g.append("g")
+histogram.append("g")
     .attr("class", "y axis")
     .attr("transform", "translate(0,0)")
     .call(yAxis);
 
-g.append("path")
-    .attr("class", "line startline");
-g.append("path")
-    .attr("class", "line endline");
-g.append("path")
-    .attr("class", "line targetline");
+// Set up an array of zeroes so that we can build the graph before we
+// get the data.
+var initial_data = []
+for(i = 0; i < 64; ++i){
+    initial_data.push(0);
+}
+
+var startbar = histogram.selectAll(".startbar")
+    .data(initial_data)
+    .enter().append("g")
+    .attr("class", "startbar")
+    .attr("transform", function(d, i){ return "translate(3," + (i*(height/64)) + ")";});
+
+var targetbar = histogram.selectAll(".targetbar")
+    .data(initial_data)
+    .enter().append("g")
+    .attr("class", "targetbar")
+    .attr("transform", function(d, i){ return "translate(3," + (i*(height/64)) + ")";});
+
+var endbar = histogram.selectAll(".endbar")
+    .data(initial_data)
+    .enter().append("g")
+    .attr("class", "endbar")
+    .attr("transform", function(d, i){ return "translate(3," + (i*(height/64)) + ")";});
+
+startbar.append("rect")
+    .attr("class", "startline")
+    .attr("stroke-width", 1)
+    .attr("x", 0)
+    .attr("width", 0)
+    .attr("y", -2*(height/(64*3)))
+    .attr("height", height/(64*3));
+
+endbar.append("rect")
+    .attr("class", "endline")
+    .attr("stroke-width", 1)
+    .attr("x", 0)
+    .attr("width", 0)
+    .attr("y", -1*(height/(64*3)))
+    .attr("height", height/(64*3));
+
+targetbar.append("rect")
+    .attr("class", "targetline")
+    .attr("stroke-width", 1)
+    .attr("x", 0)
+    .attr("width", 0)
+    .attr("y", 0)
+    .attr("height", height/(64*3));
+
+startbar.append("circle")
+    .attr("class", "start dot")
+    .attr("r", 3.5);
+targetbar.append("circle")
+    .attr("class", "target dot")
+    .attr("r", 3.5);
+endbar.append("circle")
+    .attr("class", "end dot")
+    .attr("r", 3.5);
 
 d3.json("quad-errors.json", function(error, json){
     if (error) return console.warn(error);
@@ -98,6 +150,7 @@ function init_bounds(start_lowbound, start_highbound){
         .attr("cx", highbound + margin.left)
         .attr("cy", imageheight - 20);
     svg.append("rect")
+	.attr("class", "rangeSelection")
         .attr("x", lowbound + margin.left)
         .attr("y", margin.top)
         .attr("width", highbound - lowbound)
@@ -145,7 +198,7 @@ function update_bounds(new_lowbound, new_highbound){
     d3.selectAll(".right")
 	.attr("cx", highbound + margin.left);
 
-    d3.select("rect")
+    d3.select(".rangeSelection")
 	.attr("x", lowbound + margin.left)
 	.attr("width", highbound - lowbound);
 }
@@ -174,18 +227,27 @@ function render_graph(){
     var x = d3.scale.linear()
         .domain([0, filter_data(error_data.startErrors).length])
         .range([0, width]);
-    var line = d3.svg.line()
-        .interpolate("basic")
-        .x(function(d) { return x(d.y) - x(.5); })
-        .y(function(d) { return y(d.x) ; });
+    d3.selectAll(".startbar")
+	.data(start_data)
+	.attr("transform", function(d, i) { return "translate(" + x(d.y) + "," + (height - (i * height/64)) + ")"; });
+    d3.selectAll(".startline")
+	.data(start_data)
+	.attr("width", function(d) { return x(d.y); })
+	.attr("x", function(d) { return -x(d.y); })
 
-    d3.select(".startline")
-	.datum(start_data)
-	.attr("d", line);
-    d3.select(".endline")
-	.datum(end_data)
-	.attr("d", line);
-    d3.select(".targetline")
-	.datum(target_data)
-	.attr("d", line);
+    d3.selectAll(".endbar")
+	.data(end_data)
+	.attr("transform", function(d, i) { return "translate(" + x(d.y) + "," + (height - (i * height/64)) + ")"; });
+    d3.selectAll(".endline")
+	.data(end_data)
+	.attr("width", function(d) { return x(d.y); })
+	.attr("x", function(d) { return -x(d.y); })
+
+    d3.selectAll(".targetbar")
+	.data(target_data)
+	.attr("transform", function(d, i) { return "translate(" + x(d.y) + "," + (height - (i * height/64)) + ")"; });
+    d3.selectAll(".targetline")
+	.data(target_data)
+	.attr("width", function(d) { return x(d.y); })
+	.attr("x", function(d) { return -x(d.y); })
 }
