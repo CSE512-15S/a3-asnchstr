@@ -91,13 +91,13 @@ targetbar.append("rect")
 
 startbar.append("circle")
     .attr("class", "start dot")
-    .attr("r", 3.5);
+    .attr("r", 4.5);
 targetbar.append("circle")
     .attr("class", "target dot")
-    .attr("r", 3.5);
+    .attr("r", 4.5);
 endbar.append("circle")
     .attr("class", "end dot")
-    .attr("r", 3.5);
+    .attr("r", 4.5);
 
 d3.json("quad-errors.json", function(error, json){
     if (error) return console.warn(error);
