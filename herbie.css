@@ -9,15 +9,18 @@
 }
 
 .startline {
-    stroke: red;
+    stroke: none;
+    fill: red;
     stroke-width: 1px;
 }
 .endline {
-    stroke: blue;
+    stroke: none;
+    fill: blue;
     stroke-width: 1px;
 }
 .targetline {
-    stroke: lime;
+    stroke: none;
+    fill: lime;
     stroke-width: 1px;
 }
 p {
